@@ -49,7 +49,6 @@ public class CacheConfiguration {
             cm.createCache(net.slipp.jhipster.domain.Product.class.getName() + ".cartItems", jcacheConfiguration);
             cm.createCache(net.slipp.jhipster.domain.Product.class.getName() + ".tags", jcacheConfiguration);
             cm.createCache(net.slipp.jhipster.domain.CartItems.class.getName(), jcacheConfiguration);
-            cm.createCache(net.slipp.jhipster.domain.Cart.class.getName(), jcacheConfiguration);
             cm.createCache(net.slipp.jhipster.domain.Tag.class.getName(), jcacheConfiguration);
             cm.createCache(net.slipp.jhipster.domain.Tag.class.getName() + ".products", jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry

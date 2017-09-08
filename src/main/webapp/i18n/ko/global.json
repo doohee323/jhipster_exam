@@ -12,7 +12,6 @@
                 "orderItems": "Order Items",
                 "product": "Product",
                 "cartItems": "Cart Items",
-                "cart": "Cart",
                 "tag": "Tag",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
