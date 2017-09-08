@@ -8,12 +8,6 @@
         <dd>
             <span>{{cartItems.createDt | date:'medium'}}</span>
         </dd>
-        <dt><span jhiTranslate="jhipsterApp.cartItems.cart">Cart</span></dt>
-        <dd>
-            <div *ngIf="cartItems.cart">
-                <a [routerLink]="['/cart', cartItems.cart?.id]">{{cartItems.cart?.id}}</a>
-            </div>
-        </dd>
         <dt><span jhiTranslate="jhipsterApp.cartItems.product">Product</span></dt>
         <dd>
             <div *ngIf="cartItems.product">

@@ -21,13 +21,6 @@
         </div>
 
         <div class="form-group">
-            <label jhiTranslate="jhipsterApp.cartItems.cart" for="field_cart">Cart</label>
-            <select class="form-control" id="field_cart" name="cart" [(ngModel)]="cartItems.cart" >
-                <option [ngValue]="null"></option>
-                <option [ngValue]="cartOption.id === cartItems.cart?.id ? cartItems.cart : cartOption" *ngFor="let cartOption of carts; trackBy: trackCartById">{{cartOption.id}}</option>
-            </select>
-        </div>
-        <div class="form-group">
             <label jhiTranslate="jhipsterApp.cartItems.product" for="field_product">Product</label>
             <select class="form-control" id="field_product" name="product" [(ngModel)]="cartItems.product" >
                 <option [ngValue]="null"></option>

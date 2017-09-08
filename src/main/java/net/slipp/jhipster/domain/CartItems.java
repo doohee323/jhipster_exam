@@ -28,9 +28,6 @@ public class CartItems implements Serializable {
     private ZonedDateTime createDt;
 
     @ManyToOne
-    private Cart cart;
-
-    @ManyToOne
     private Product product;
 
     public Long getId() {
@@ -52,19 +49,6 @@ public class CartItems implements Serializable {
 
     public void setCreateDt(ZonedDateTime createDt) {
         this.createDt = createDt;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public CartItems cart(Cart cart) {
-        this.cart = cart;
-        return this;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
     }
 
     public Product getProduct() {

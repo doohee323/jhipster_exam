@@ -3,12 +3,6 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "relationshipName": "cart",
-            "otherEntityName": "cart",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "relationshipName": "product",
             "otherEntityName": "product",
             "otherEntityField": "productName"
@@ -21,8 +15,8 @@
         }
     ],
     "changelogDate": "20170823142742",
-    "entityTableName": "cart_items",
     "dto": "no",
-    "pagination": "infinite-scroll",
-    "service": "no"
+    "service": "no",
+    "entityTableName": "cart_items",
+    "pagination": "infinite-scroll"
 }
