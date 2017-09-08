@@ -2,7 +2,6 @@ import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { JhipsterSharedModule } from '../../shared';
-import { JhipsterAdminModule } from '../../admin/admin.module';
 import {
     CartService,
     CartPopupService,
@@ -24,7 +23,6 @@ const ENTITY_STATES = [
 @NgModule({
     imports: [
         JhipsterSharedModule,
-        JhipsterAdminModule,
         RouterModule.forRoot(ENTITY_STATES, { useHash: true })
     ],
     declarations: [

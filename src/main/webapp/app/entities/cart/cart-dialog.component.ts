@@ -9,8 +9,6 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Cart } from './cart.model';
 import { CartPopupService } from './cart-popup.service';
 import { CartService } from './cart.service';
-import { User, UserService } from '../../shared';
-import { ResponseWrapper } from '../../shared';
 
 @Component({
     selector: 'jhi-cart-dialog',
@@ -21,21 +19,16 @@ export class CartDialogComponent implements OnInit {
     cart: Cart;
     isSaving: boolean;
 
-    users: User[];
-
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: JhiAlertService,
         private cartService: CartService,
-        private userService: UserService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
-        this.userService.query()
-            .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
 
     clear() {
@@ -76,10 +69,6 @@ export class CartDialogComponent implements OnInit {
 
     private onError(error) {
         this.alertService.error(error.message, null, null);
-    }
-
-    trackUserById(index: number, item: User) {
-        return item.id;
     }
 }
 
