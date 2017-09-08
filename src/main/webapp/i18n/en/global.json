@@ -103,6 +103,7 @@
         "action": {
             "addblob": "Add blob",
             "addimage": "Add image",
+            "addCart": "Add to cart",
             "back": "Back",
             "cancel": "Cancel",
             "delete": "Delete",

@@ -9,10 +9,10 @@ import { ResponseWrapper, createRequestOption } from '../../shared';
 @Injectable()
 export class CartItemsService {
 
-    private resourceUrl = 'api/cart-items';
-    private resourceSearchUrl = 'api/_search/cart-items';
+    protected resourceUrl = 'api/cart-items';
+    protected resourceSearchUrl = 'api/_search/cart-items';
 
-    constructor(private http: Http, private dateUtils: JhiDateUtils) { }
+    constructor(protected http: Http, protected dateUtils: JhiDateUtils) { }
 
     create(cartItems: CartItems): Observable<CartItems> {
         const copy = this.convert(cartItems);
@@ -56,7 +56,7 @@ export class CartItemsService {
             .map((res: any) => this.convertResponse(res));
     }
 
-    private convertResponse(res: Response): ResponseWrapper {
+    protected convertResponse(res: Response): ResponseWrapper {
         const jsonResponse = res.json();
         for (let i = 0; i < jsonResponse.length; i++) {
             this.convertItemFromServer(jsonResponse[i]);
@@ -64,12 +64,12 @@ export class CartItemsService {
         return new ResponseWrapper(res.headers, jsonResponse, res.status);
     }
 
-    private convertItemFromServer(entity: any) {
+    protected convertItemFromServer(entity: any) {
         entity.createDt = this.dateUtils
             .convertDateTimeFromServer(entity.createDt);
     }
 
-    private convert(cartItems: CartItems): CartItems {
+    protected convert(cartItems: CartItems): CartItems {
         const copy: CartItems = Object.assign({}, cartItems);
 
         copy.createDt = this.dateUtils.toDate(cartItems.createDt);
