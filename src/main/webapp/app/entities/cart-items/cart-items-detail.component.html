@@ -14,6 +14,10 @@
                 <a [routerLink]="['/product', cartItems.product?.id]">{{cartItems.product?.productName}}</a>
             </div>
         </dd>
+        <dt><span jhiTranslate="jhipsterApp.cartItems.user">User</span></dt>
+        <dd>
+            {{cartItems.user?.login}}
+        </dd>
     </dl>
 
     <button type="submit"

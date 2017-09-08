@@ -6,6 +6,14 @@
             "relationshipName": "product",
             "otherEntityName": "product",
             "otherEntityField": "productName"
+        },
+        {
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true,
+            "otherEntityRelationshipName": "cartItems"
         }
     ],
     "fields": [

@@ -10,6 +10,7 @@ import { CartItems } from './cart-items.model';
 import { CartItemsPopupService } from './cart-items-popup.service';
 import { CartItemsService } from './cart-items.service';
 import { Product, ProductService } from '../product';
+import { User, UserService } from '../../shared';
 import { ResponseWrapper } from '../../shared';
 
 @Component({
@@ -23,11 +24,14 @@ export class CartItemsDialogComponent implements OnInit {
 
     products: Product[];
 
+    users: User[];
+
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: JhiAlertService,
         private cartItemsService: CartItemsService,
         private productService: ProductService,
+        private userService: UserService,
         private eventManager: JhiEventManager
     ) {
     }
@@ -36,6 +40,8 @@ export class CartItemsDialogComponent implements OnInit {
         this.isSaving = false;
         this.productService.query()
             .subscribe((res: ResponseWrapper) => { this.products = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.userService.query()
+            .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
 
     clear() {
@@ -79,6 +85,10 @@ export class CartItemsDialogComponent implements OnInit {
     }
 
     trackProductById(index: number, item: Product) {
+        return item.id;
+    }
+
+    trackUserById(index: number, item: User) {
         return item.id;
     }
 }

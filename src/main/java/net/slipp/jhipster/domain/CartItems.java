@@ -30,6 +30,9 @@ public class CartItems implements Serializable {
     @ManyToOne
     private Product product;
 
+    @ManyToOne
+    private User user;
+
     public Long getId() {
         return id;
     }
@@ -62,6 +65,19 @@ public class CartItems implements Serializable {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public CartItems user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
