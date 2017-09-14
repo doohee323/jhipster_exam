@@ -1,53 +1,31 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs/Rx';
-import { JhiEventManager, JhiParseLinks, JhiPaginationUtil, JhiLanguageService, JhiAlertService } from 'ng-jhipster';
-
-import { CartItems } from './cart-items.model';
-import { CartItemsService } from './cart-items.service';
-import { ITEMS_PER_PAGE, Principal, ResponseWrapper } from '../../shared';
-import { PaginationConfig } from '../../blocks/config/uib-pagination.config';
+import {Component, OnInit, OnDestroy} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {JhiEventManager, JhiParseLinks, JhiAlertService} from 'ng-jhipster';
+import {CartItems} from './cart-items.model';
+import {Principal, ResponseWrapper} from '../../shared';
+import {MyCartItemsService} from './my-cart-items.service';
+import {CartItemsComponent} from './cart-items.component';
 
 @Component({
-    selector: 'jhi-cart-items',
-    templateUrl: './cart-items.component.html'
+    selector: 'jhi-my-cart-items',
+    templateUrl: './my-cart-items.component.html'
 })
-export class CartItemsComponent implements OnInit, OnDestroy {
-
-    cartItems: CartItems[];
-    currentAccount: any;
-    eventSubscriber: Subscription;
-    itemsPerPage: number;
-    links: any;
-    page: any;
-    predicate: any;
-    queryCount: any;
-    reverse: any;
-    totalItems: number;
-    currentSearch: string;
+export class MyCartItemsComponent extends CartItemsComponent implements OnInit, OnDestroy {
 
     constructor(
-        protected cartItemsService: CartItemsService,
-        protected alertService: JhiAlertService,
-        protected eventManager: JhiEventManager,
-        protected parseLinks: JhiParseLinks,
-        protected activatedRoute: ActivatedRoute,
-        protected principal: Principal
+         private myCartItemsService: MyCartItemsService,
+         alertService: JhiAlertService,
+         eventManager: JhiEventManager,
+         parseLinks: JhiParseLinks,
+         activatedRoute: ActivatedRoute,
+         principal: Principal
     ) {
-        this.cartItems = [];
-        this.itemsPerPage = ITEMS_PER_PAGE;
-        this.page = 0;
-        this.links = {
-            last: 0
-        };
-        this.predicate = 'id';
-        this.reverse = true;
-        this.currentSearch = activatedRoute.snapshot.params['search'] ? activatedRoute.snapshot.params['search'] : '';
+        super(myCartItemsService, alertService, eventManager, parseLinks, activatedRoute, principal);
     }
 
     loadAll() {
         if (this.currentSearch) {
-            this.cartItemsService.search({
+            this.myCartItemsService.search({
                 query: this.currentSearch,
                 page: this.page,
                 size: this.itemsPerPage,
@@ -58,7 +36,7 @@ export class CartItemsComponent implements OnInit, OnDestroy {
             );
             return;
         }
-        this.cartItemsService.query({
+        this.myCartItemsService.query({
             page: this.page,
             size: this.itemsPerPage,
             sort: this.sort()
@@ -132,15 +110,16 @@ export class CartItemsComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    protected onSuccess(data, headers) {
-        this.links = this.parseLinks.parse(headers.get('link'));
-        this.totalItems = headers.get('X-Total-Count');
+     onSuccess(data, headers) {
+
+        // this.links = this.parseLinks.parse(headers.get('link'));
+        // this.totalItems = headers.get('X-Total-Count');
         for (let i = 0; i < data.length; i++) {
             this.cartItems.push(data[i]);
         }
     }
 
-    protected onError(error) {
+     onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }

@@ -12,7 +12,6 @@
                 "orderItems": "Order Items",
                 "product": "Product",
                 "cartItems": "Cart Items",
-                "cart": "Cart",
                 "tag": "Tag",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
@@ -104,6 +103,7 @@
         "action": {
             "addblob": "Blob 추가",
             "addimage": "이미지 추가",
+            "addCart": "카트담기",
             "back": "뒤로",
             "cancel": "취소",
             "delete": "삭제",

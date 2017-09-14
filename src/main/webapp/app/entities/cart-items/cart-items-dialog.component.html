@@ -21,17 +21,17 @@
         </div>
 
         <div class="form-group">
-            <label jhiTranslate="jhipsterApp.cartItems.cart" for="field_cart">Cart</label>
-            <select class="form-control" id="field_cart" name="cart" [(ngModel)]="cartItems.cart" >
-                <option [ngValue]="null"></option>
-                <option [ngValue]="cartOption.id === cartItems.cart?.id ? cartItems.cart : cartOption" *ngFor="let cartOption of carts; trackBy: trackCartById">{{cartOption.id}}</option>
-            </select>
-        </div>
-        <div class="form-group">
             <label jhiTranslate="jhipsterApp.cartItems.product" for="field_product">Product</label>
             <select class="form-control" id="field_product" name="product" [(ngModel)]="cartItems.product" >
                 <option [ngValue]="null"></option>
                 <option [ngValue]="productOption.id === cartItems.product?.id ? cartItems.product : productOption" *ngFor="let productOption of products; trackBy: trackProductById">{{productOption.productName}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label jhiTranslate="jhipsterApp.cartItems.user" for="field_user">User</label>
+            <select class="form-control" id="field_user" name="user" [(ngModel)]="cartItems.user" >
+                <option [ngValue]="null"></option>
+                <option [ngValue]="userOption.id === cartItems.user?.id ? cartItems.user : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
             </select>
         </div>
     </div>

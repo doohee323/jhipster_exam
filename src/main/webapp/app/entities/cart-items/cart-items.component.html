@@ -31,8 +31,8 @@
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="createDt"><span jhiTranslate="jhipsterApp.cartItems.createDt">Create Dt</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="cart.id"><span jhiTranslate="jhipsterApp.cartItems.cart">Cart</span> <span class="fa fa-sort"></span></th>
             <th jhiSortBy="product.productName"><span jhiTranslate="jhipsterApp.cartItems.product">Product</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="user.login"><span jhiTranslate="jhipsterApp.cartItems.user">User</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
@@ -41,14 +41,12 @@
                 <td><a [routerLink]="['../cart-items', cartItems.id ]">{{cartItems.id}}</a></td>
                 <td>{{cartItems.createDt | date:'medium'}}</td>
                 <td>
-                    <div *ngIf="cartItems.cart">
-                        <a [routerLink]="['../cart', cartItems.cart?.id ]" >{{cartItems.cart?.id}}</a>
-                    </div>
-                </td>
-                <td>
                     <div *ngIf="cartItems.product">
                         <a [routerLink]="['../product', cartItems.product?.id ]" >{{cartItems.product?.productName}}</a>
                     </div>
+                </td>
+                <td>
+                    {{cartItems.user?.login}}
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">

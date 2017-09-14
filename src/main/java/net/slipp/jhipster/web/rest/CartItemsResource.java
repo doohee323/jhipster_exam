@@ -108,6 +108,19 @@ public class CartItemsResource {
     }
 
     /**
+     * GET  /cart-items : get user's the cartItems.
+     *
+     * @return the ResponseEntity with status 200 (OK) and the list of cartItems in body
+     */
+    @GetMapping("/my/cart-items")
+    @Timed
+    public ResponseEntity<List<CartItems>> getMyCartItems() {
+        log.debug("REST request to get a page of MyCartItems");
+        List<CartItems> list = cartItemsRepository.findByUserIsCurrentUser();
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(list));
+    }
+
+    /**
      * GET  /cart-items/:id : get the "id" cartItems.
      *
      * @param id the id of the cartItems to retrieve

@@ -33,7 +33,8 @@ public class Customer implements Serializable {
     private String phone;
 
     @OneToOne
-    @JoinColumn(unique = true)
+//    @JoinColumn(unique = true)
+    @MapsId
     private User user;
 
     public Long getId() {

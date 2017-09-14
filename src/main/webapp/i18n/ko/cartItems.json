@@ -17,8 +17,8 @@
                 "title": "Cart Items"
             },
             "createDt": "Create Dt",
-            "cart": "Cart",
-            "product": "Product"
+            "product": "Product",
+            "user": "User"
         }
     }
 }

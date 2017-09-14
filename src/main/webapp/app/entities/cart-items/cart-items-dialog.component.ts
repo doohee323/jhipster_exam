@@ -9,8 +9,8 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { CartItems } from './cart-items.model';
 import { CartItemsPopupService } from './cart-items-popup.service';
 import { CartItemsService } from './cart-items.service';
-import { Cart, CartService } from '../cart';
 import { Product, ProductService } from '../product';
+import { User, UserService } from '../../shared';
 import { ResponseWrapper } from '../../shared';
 
 @Component({
@@ -22,26 +22,26 @@ export class CartItemsDialogComponent implements OnInit {
     cartItems: CartItems;
     isSaving: boolean;
 
-    carts: Cart[];
-
     products: Product[];
+
+    users: User[];
 
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: JhiAlertService,
         private cartItemsService: CartItemsService,
-        private cartService: CartService,
         private productService: ProductService,
+        private userService: UserService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
-        this.cartService.query()
-            .subscribe((res: ResponseWrapper) => { this.carts = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
         this.productService.query()
             .subscribe((res: ResponseWrapper) => { this.products = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.userService.query()
+            .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
 
     clear() {
@@ -84,11 +84,11 @@ export class CartItemsDialogComponent implements OnInit {
         this.alertService.error(error.message, null, null);
     }
 
-    trackCartById(index: number, item: Cart) {
+    trackProductById(index: number, item: Product) {
         return item.id;
     }
 
-    trackProductById(index: number, item: Product) {
+    trackUserById(index: number, item: User) {
         return item.id;
     }
 }

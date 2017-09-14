@@ -8,17 +8,17 @@
     -->
     <changeSet id="20170823142742-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="cart_id"
-                                 baseTableName="cart_items"
-                                 constraintName="fk_cart_items_cart_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="cart"/>
-
         <addForeignKeyConstraint baseColumnNames="product_id"
                                  baseTableName="cart_items"
                                  constraintName="fk_cart_items_product_id"
                                  referencedColumnNames="id"
                                  referencedTableName="product"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="cart_items"
+                                 constraintName="fk_cart_items_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
 
     </changeSet>
 </databaseChangeLog>

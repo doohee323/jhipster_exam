@@ -1,0 +1,29 @@
+<div>
+    <h2>
+        <span jhiTranslate="jhipsterApp.cartItems.home.title">My Cart Items</span>
+    </h2>
+    <jhi-alert></jhi-alert>
+    <div class="table-responsive" *ngIf="cartItems">
+            <ul infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
+            <li *ngFor="let cartItems of cartItems ;trackBy: trackId" [routerLink]="['../my-cart-items', cartItems.id ]">
+                <span>
+                    <span *ngIf="cartItems.product">
+                        <a [routerLink]="['../product', cartItems.product?.id ]" >{{cartItems.product?.productName}}</a>
+                    </span>
+                </span>
+                <span>{{cartItems.createDt | date:'short'}}</span>
+                <div class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <button type="submit"
+                                [routerLink]="['/', { outlets: { popup: 'cart-items/'+ cartItems.id + '/delete'} }]"
+                                replaceUrl="true"
+                                class="btn btn-danger btn-sm">
+                            <span class="fa fa-remove"></span>
+                            <span class="hidden-md-down" jhiTranslate="entity.action.delete">Delete</span>
+                        </button>
+                    </div>
+                </div>
+            </li>
+            </ul>
+    </div>
+</div>

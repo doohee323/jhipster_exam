@@ -8,17 +8,15 @@
         <dd>
             <span>{{cartItems.createDt | date:'medium'}}</span>
         </dd>
-        <dt><span jhiTranslate="jhipsterApp.cartItems.cart">Cart</span></dt>
-        <dd>
-            <div *ngIf="cartItems.cart">
-                <a [routerLink]="['/cart', cartItems.cart?.id]">{{cartItems.cart?.id}}</a>
-            </div>
-        </dd>
         <dt><span jhiTranslate="jhipsterApp.cartItems.product">Product</span></dt>
         <dd>
             <div *ngIf="cartItems.product">
                 <a [routerLink]="['/product', cartItems.product?.id]">{{cartItems.product?.productName}}</a>
             </div>
+        </dd>
+        <dt><span jhiTranslate="jhipsterApp.cartItems.user">User</span></dt>
+        <dd>
+            {{cartItems.user?.login}}
         </dd>
     </dl>
 

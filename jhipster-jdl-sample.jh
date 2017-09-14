@@ -42,11 +42,10 @@ relationship OneToMany {
 relationship ManyToOne {
 	Orders{user(login)} to User,
 	OrderItems{orders(orderCode)} to Orders,
-    CartItems{cart} to Cart
+    CartItems{user} to User
 }
 
 relationship OneToOne {
-	Cart{user(login)} to User,
     Customer{user(login)} to User
 }
 
@@ -55,7 +54,7 @@ relationship ManyToMany {
 }
 
 // Set pagination options
-paginate Orders, Product, OrderItems, CartItems, Cart, Tag with infinite-scroll
+paginate Orders, Product, OrderItems, CartItems, Tag with infinite-scroll
 paginate Customer with pagination
 
 // dto * with mapstruct

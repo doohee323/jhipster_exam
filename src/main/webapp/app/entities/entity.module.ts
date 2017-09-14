@@ -5,7 +5,6 @@ import { JhipsterOrdersModule } from './orders/orders.module';
 import { JhipsterOrderItemsModule } from './order-items/order-items.module';
 import { JhipsterProductModule } from './product/product.module';
 import { JhipsterCartItemsModule } from './cart-items/cart-items.module';
-import { JhipsterCartModule } from './cart/cart.module';
 import { JhipsterTagModule } from './tag/tag.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
@@ -16,7 +15,6 @@ import { JhipsterTagModule } from './tag/tag.module';
         JhipsterOrderItemsModule,
         JhipsterProductModule,
         JhipsterCartItemsModule,
-        JhipsterCartModule,
         JhipsterTagModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
