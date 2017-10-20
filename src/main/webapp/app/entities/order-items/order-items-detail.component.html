@@ -14,14 +14,14 @@
         </dd>
         <dt><span jhiTranslate="jhipsterApp.orderItems.orders">Orders</span></dt>
         <dd>
-            <div *ngIf="orderItems.ordersId">
-                <a [routerLink]="['/orders', orderItems.ordersId]">{{orderItems.ordersId}}</a>
+            <div *ngIf="orderItems.orders">
+                <a [routerLink]="['/orders', orderItems.orders?.id]">{{orderItems.orders?.orderCode}}</a>
             </div>
         </dd>
         <dt><span jhiTranslate="jhipsterApp.orderItems.product">Product</span></dt>
         <dd>
-            <div *ngIf="orderItems.productId">
-                <a [routerLink]="['/product', orderItems.productId]">{{orderItems.productId}}</a>
+            <div *ngIf="orderItems.product">
+                <a [routerLink]="['/product', orderItems.product?.id]">{{orderItems.product?.productName}}</a>
             </div>
         </dd>
     </dl>

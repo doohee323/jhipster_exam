@@ -65,14 +65,14 @@ export class OrdersService {
     }
 
     private convertItemFromServer(entity: any) {
-        entity.orderDate = this.dateUtils
-            .convertDateTimeFromServer(entity.orderDate);
+        entity.orderDt = this.dateUtils
+            .convertDateTimeFromServer(entity.orderDt);
     }
 
     private convert(orders: Orders): Orders {
         const copy: Orders = Object.assign({}, orders);
 
-        copy.orderDate = this.dateUtils.toDate(orders.orderDate);
+        copy.orderDt = this.dateUtils.toDate(orders.orderDt);
         return copy;
     }
 }

@@ -13,18 +13,39 @@
                    [(ngModel)]="orders.id" readonly />
         </div>
         <div class="form-group">
-            <label class="form-control-label" jhiTranslate="jhipsterApp.orders.orderDate" for="field_orderDate">Order Date</label>
+            <label class="form-control-label" jhiTranslate="jhipsterApp.orders.orderCode" for="field_orderCode">Order Code</label>
+            <input type="text" class="form-control" name="orderCode" id="field_orderCode"
+                [(ngModel)]="orders.orderCode" required />
+            <div [hidden]="!(editForm.controls.orderCode?.dirty && editForm.controls.orderCode?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.orderCode?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="jhipsterApp.orders.orderDt" for="field_orderDt">Order Dt</label>
             <div class="d-flex">
-                <input id="field_orderDate" type="datetime-local" class="form-control" name="orderDate" [(ngModel)]="orders.orderDate"
-                  />
+                <input id="field_orderDt" type="datetime-local" class="form-control" name="orderDt" [(ngModel)]="orders.orderDt"
+                required  />
+            </div>
+            <div [hidden]="!(editForm.controls.orderDt?.dirty && editForm.controls.orderDt?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.orderDt?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.orderDt?.errors?.ZonedDateTimelocal" jhiTranslate="entity.validation.ZonedDateTimelocal">
+                    This field should be a date and time.
+                </small>
             </div>
         </div>
 
         <div class="form-group">
-            <label jhiTranslate="jhipsterApp.orders.customer" for="field_customer">Customer</label>
-            <select class="form-control" id="field_customer" name="customer" [(ngModel)]="orders.customerId" >
+            <label jhiTranslate="jhipsterApp.orders.user" for="field_user">User</label>
+            <select class="form-control" id="field_user" name="user" [(ngModel)]="orders.user" >
                 <option [ngValue]="null"></option>
-                <option [ngValue]="customerOption.id" *ngFor="let customerOption of customers; trackBy: trackCustomerById">{{customerOption.id}}</option>
+                <option [ngValue]="userOption.id === orders.user?.id ? orders.user : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
             </select>
         </div>
     </div>

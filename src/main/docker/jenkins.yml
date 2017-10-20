@@ -1,0 +1,8 @@
+version: '2'
+services:
+    jhipster-jenkins:
+        image: jenkins:latest
+        # volumes:
+        ports:
+            - 32771:8080
+            - 32770:50000

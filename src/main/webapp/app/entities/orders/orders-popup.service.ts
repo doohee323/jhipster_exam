@@ -28,8 +28,8 @@ export class OrdersPopupService {
 
             if (id) {
                 this.ordersService.find(id).subscribe((orders) => {
-                    orders.orderDate = this.datePipe
-                        .transform(orders.orderDate, 'yyyy-MM-ddThh:mm');
+                    orders.orderDt = this.datePipe
+                        .transform(orders.orderDt, 'yyyy-MM-ddThh:mm');
                     this.ngbModalRef = this.ordersModalRef(component, orders);
                     resolve(this.ngbModalRef);
                 });

@@ -6,6 +6,9 @@ export class Product implements BaseEntity {
         public productName?: string,
         public productDesc?: string,
         public price?: number,
+        public orderItems?: BaseEntity[],
+        public cartItems?: BaseEntity[],
+        public tags?: BaseEntity[],
     ) {
     }
 }

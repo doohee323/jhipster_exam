@@ -1,6 +1,7 @@
 import { Injectable, Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { DatePipe } from '@angular/common';
 import { CartItems } from './cart-items.model';
 import { CartItemsService } from './cart-items.service';
 
@@ -9,6 +10,7 @@ export class CartItemsPopupService {
     private ngbModalRef: NgbModalRef;
 
     constructor(
+        private datePipe: DatePipe,
         private modalService: NgbModal,
         private router: Router,
         private cartItemsService: CartItemsService
@@ -26,6 +28,8 @@ export class CartItemsPopupService {
 
             if (id) {
                 this.cartItemsService.find(id).subscribe((cartItems) => {
+                    cartItems.createDt = this.datePipe
+                        .transform(cartItems.createDt, 'yyyy-MM-ddThh:mm');
                     this.ngbModalRef = this.cartItemsModalRef(component, cartItems);
                     resolve(this.ngbModalRef);
                 });

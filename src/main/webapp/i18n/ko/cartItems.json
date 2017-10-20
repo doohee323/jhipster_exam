@@ -16,8 +16,9 @@
             "detail": {
                 "title": "Cart Items"
             },
-            "customer": "Customer",
-            "product": "Product"
+            "createDt": "Create Dt",
+            "product": "Product",
+            "user": "User"
         }
     }
 }

@@ -16,6 +16,12 @@
         <dd>
             <span>{{product.price}}</span>
         </dd>
+        <dt><span jhiTranslate="jhipsterApp.product.tag">Tag</span></dt>
+        <dd>
+            <span *ngFor="let tag of product.tags; let last = last">
+                <a [routerLink]="['/tag', tag?.id ]">{{tag.name}}</a>{{last ? '' : ', '}}
+            </span>
+        </dd>
     </dl>
 
     <button type="submit"

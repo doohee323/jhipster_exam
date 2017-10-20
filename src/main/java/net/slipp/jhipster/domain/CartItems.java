@@ -6,6 +6,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 /**
@@ -23,12 +24,14 @@ public class CartItems implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    private Customer customer;
+    @Column(name = "create_dt")
+    private ZonedDateTime createDt;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @ManyToOne
     private Product product;
+
+    @ManyToOne
+    private User user;
 
     public Long getId() {
         return id;
@@ -38,17 +41,17 @@ public class CartItems implements Serializable {
         this.id = id;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public ZonedDateTime getCreateDt() {
+        return createDt;
     }
 
-    public CartItems customer(Customer customer) {
-        this.customer = customer;
+    public CartItems createDt(ZonedDateTime createDt) {
+        this.createDt = createDt;
         return this;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setCreateDt(ZonedDateTime createDt) {
+        this.createDt = createDt;
     }
 
     public Product getProduct() {
@@ -62,6 +65,19 @@ public class CartItems implements Serializable {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public CartItems user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -88,6 +104,7 @@ public class CartItems implements Serializable {
     public String toString() {
         return "CartItems{" +
             "id=" + getId() +
+            ", createDt='" + getCreateDt() + "'" +
             "}";
     }
 }

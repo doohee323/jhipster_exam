@@ -9,8 +9,8 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { CartItems } from './cart-items.model';
 import { CartItemsPopupService } from './cart-items-popup.service';
 import { CartItemsService } from './cart-items.service';
-import { Customer, CustomerService } from '../customer';
 import { Product, ProductService } from '../product';
+import { User, UserService } from '../../shared';
 import { ResponseWrapper } from '../../shared';
 
 @Component({
@@ -22,37 +22,26 @@ export class CartItemsDialogComponent implements OnInit {
     cartItems: CartItems;
     isSaving: boolean;
 
-    customers: Customer[];
-
     products: Product[];
+
+    users: User[];
 
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: JhiAlertService,
         private cartItemsService: CartItemsService,
-        private customerService: CustomerService,
         private productService: ProductService,
+        private userService: UserService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
-        this.customerService.query()
-            .subscribe((res: ResponseWrapper) => { this.customers = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
-        this.productService
-            .query({filter: 'cartitems-is-null'})
-            .subscribe((res: ResponseWrapper) => {
-                if (!this.cartItems.productId) {
-                    this.products = res.json;
-                } else {
-                    this.productService
-                        .find(this.cartItems.productId)
-                        .subscribe((subRes: Product) => {
-                            this.products = [subRes].concat(res.json);
-                        }, (subRes: ResponseWrapper) => this.onError(subRes.json));
-                }
-            }, (res: ResponseWrapper) => this.onError(res.json));
+        this.productService.query()
+            .subscribe((res: ResponseWrapper) => { this.products = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.userService.query()
+            .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
 
     clear() {
@@ -95,11 +84,11 @@ export class CartItemsDialogComponent implements OnInit {
         this.alertService.error(error.message, null, null);
     }
 
-    trackCustomerById(index: number, item: Customer) {
+    trackProductById(index: number, item: Product) {
         return item.id;
     }
 
-    trackProductById(index: number, item: Product) {
+    trackUserById(index: number, item: User) {
         return item.id;
     }
 }

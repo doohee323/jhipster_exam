@@ -1,15 +1,13 @@
 package net.slipp.jhipster.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 /**
@@ -27,16 +25,16 @@ public class Orders implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "order_date")
-    private ZonedDateTime orderDate;
+    @NotNull
+    @Column(name = "order_code", nullable = false)
+    private String orderCode;
+
+    @NotNull
+    @Column(name = "order_dt", nullable = false)
+    private ZonedDateTime orderDt;
 
     @ManyToOne
-    private Customer customer;
-
-    @OneToMany(mappedBy = "orders")
-    @JsonIgnore
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<OrderItems> orderItems = new HashSet<>();
+    private User user;
 
     public Long getId() {
         return id;
@@ -46,55 +44,43 @@ public class Orders implements Serializable {
         this.id = id;
     }
 
-    public ZonedDateTime getOrderDate() {
-        return orderDate;
+    public String getOrderCode() {
+        return orderCode;
     }
 
-    public Orders orderDate(ZonedDateTime orderDate) {
-        this.orderDate = orderDate;
+    public Orders orderCode(String orderCode) {
+        this.orderCode = orderCode;
         return this;
     }
 
-    public void setOrderDate(ZonedDateTime orderDate) {
-        this.orderDate = orderDate;
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public ZonedDateTime getOrderDt() {
+        return orderDt;
     }
 
-    public Orders customer(Customer customer) {
-        this.customer = customer;
+    public Orders orderDt(ZonedDateTime orderDt) {
+        this.orderDt = orderDt;
         return this;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setOrderDt(ZonedDateTime orderDt) {
+        this.orderDt = orderDt;
     }
 
-    public Set<OrderItems> getOrderItems() {
-        return orderItems;
+    public User getUser() {
+        return user;
     }
 
-    public Orders orderItems(Set<OrderItems> orderItems) {
-        this.orderItems = orderItems;
+    public Orders user(User user) {
+        this.user = user;
         return this;
     }
 
-    public Orders addOrderItems(OrderItems orderItems) {
-        this.orderItems.add(orderItems);
-        orderItems.setOrders(this);
-        return this;
-    }
-
-    public Orders removeOrderItems(OrderItems orderItems) {
-        this.orderItems.remove(orderItems);
-        orderItems.setOrders(null);
-        return this;
-    }
-
-    public void setOrderItems(Set<OrderItems> orderItems) {
-        this.orderItems = orderItems;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
@@ -121,7 +107,8 @@ public class Orders implements Serializable {
     public String toString() {
         return "Orders{" +
             "id=" + getId() +
-            ", orderDate='" + getOrderDate() + "'" +
+            ", orderCode='" + getOrderCode() + "'" +
+            ", orderDt='" + getOrderDt() + "'" +
             "}";
     }
 }

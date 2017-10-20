@@ -27,12 +27,12 @@ export class CartItemsComponent implements OnInit, OnDestroy {
     currentSearch: string;
 
     constructor(
-        private cartItemsService: CartItemsService,
-        private alertService: JhiAlertService,
-        private eventManager: JhiEventManager,
-        private parseLinks: JhiParseLinks,
-        private activatedRoute: ActivatedRoute,
-        private principal: Principal
+        protected cartItemsService: CartItemsService,
+        protected alertService: JhiAlertService,
+        protected eventManager: JhiEventManager,
+        protected parseLinks: JhiParseLinks,
+        protected activatedRoute: ActivatedRoute,
+        protected principal: Principal
     ) {
         this.cartItems = [];
         this.itemsPerPage = ITEMS_PER_PAGE;
@@ -132,7 +132,7 @@ export class CartItemsComponent implements OnInit, OnDestroy {
         return result;
     }
 
-    private onSuccess(data, headers) {
+    protected onSuccess(data, headers) {
         this.links = this.parseLinks.parse(headers.get('link'));
         this.totalItems = headers.get('X-Total-Count');
         for (let i = 0; i < data.length; i++) {
@@ -140,7 +140,7 @@ export class CartItemsComponent implements OnInit, OnDestroy {
         }
     }
 
-    private onError(error) {
+    protected onError(error) {
         this.alertService.error(error.message, null, null);
     }
 }

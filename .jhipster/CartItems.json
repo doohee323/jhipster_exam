@@ -2,24 +2,29 @@
     "fluentMethods": true,
     "relationships": [
         {
-            "relationshipName": "customer",
-            "otherEntityName": "customer",
             "relationshipType": "many-to-one",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-one",
             "relationshipName": "product",
             "otherEntityName": "product",
-            "otherEntityField": "id",
+            "otherEntityField": "productName"
+        },
+        {
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login",
             "ownerSide": true,
             "otherEntityRelationshipName": "cartItems"
         }
     ],
-    "fields": [],
-    "changelogDate": "20170816030939",
+    "fields": [
+        {
+            "fieldName": "createDt",
+            "fieldType": "ZonedDateTime"
+        }
+    ],
+    "changelogDate": "20170823142742",
+    "dto": "no",
+    "service": "no",
     "entityTableName": "cart_items",
-    "dto": "mapstruct",
-    "pagination": "infinite-scroll",
-    "service": "serviceImpl"
+    "pagination": "infinite-scroll"
 }

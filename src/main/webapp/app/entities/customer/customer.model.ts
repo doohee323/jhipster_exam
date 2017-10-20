@@ -1,4 +1,4 @@
-import { BaseEntity } from './../../shared';
+import { BaseEntity, User } from './../../shared';
 
 const enum CustomerLevel {
     'NEW',
@@ -14,9 +14,7 @@ export class Customer implements BaseEntity {
         public id?: number,
         public customerLevel?: CustomerLevel,
         public phone?: string,
-        public userId?: number,
-        public orders?: BaseEntity[],
-        public cartItems?: BaseEntity[],
+        public user?: User,
     ) {
     }
 }

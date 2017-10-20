@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.elasticsearch.annotations.Document;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -23,17 +24,18 @@ public class OrderItems implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "unit_price")
+    @NotNull
+    @Column(name = "unit_price", nullable = false)
     private Integer unitPrice;
 
-    @Column(name = "quantity")
+    @NotNull
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
     @ManyToOne
     private Orders orders;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @ManyToOne
     private Product product;
 
     public Long getId() {

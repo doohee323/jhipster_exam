@@ -18,7 +18,10 @@
             },
             "productName": "Product Name",
             "productDesc": "Product Desc",
-            "price": "Price"
+            "price": "Price",
+            "orderItems": "Order Items",
+            "cartItems": "Cart Items",
+            "tag": "Tag"
         }
     }
 }

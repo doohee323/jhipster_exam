@@ -9,43 +9,65 @@ enum CustomerLevel {
 }
 
 entity Orders {
-    orderDate ZonedDateTime
+	orderCode String required,
+    orderDt ZonedDateTime required
 }
 
 entity OrderItems {
-    unitPrice Integer,
-    quantity Integer
+    unitPrice Integer required,
+    quantity Integer required
 }
 
 entity Product {
-    productName String,
+    productName String required,
     productDesc String,
-    price Integer
+    price Integer required
 }
-
 entity CartItems {
+     createDt ZonedDateTime
 }
 
+entity Cart {
+}
+
+entity Tag {
+	name String required minlength(2)
+}
 
 relationship OneToMany {
-	Orders{orderItems(orderId)} to OrderItems,
-    Customer{orders(customerId)} to Orders,
-    Customer{cartItems} to CartItems
+    Product to OrderItems{product(productName)},
+    Product to CartItems{product(productName)}
+}
+
+relationship ManyToOne {
+	Orders{user(login)} to User,
+	OrderItems{orders(orderCode)} to Orders,
+    CartItems{user} to User
 }
 
 relationship OneToOne {
-	OrderItems{product} to Product,
-    CartItems{product} to Product,
-    Customer{user} to User
+    Customer{user(login)} to User
+}
+
+relationship ManyToMany {
+	Product{tag(name)} to Tag{product}
 }
 
 // Set pagination options
-paginate Orders, Product, OrderItems, CartItems with infinite-scroll
+paginate Orders, Product, OrderItems, CartItems, Tag with infinite-scroll
 paginate Customer with pagination
 
-dto * with mapstruct
+// dto * with mapstruct
 
 // Set service options to all except few
-service all with serviceImpl except User
+// service all with serviceImpl except Orders
+
+// ex)
+// dto A, B with mapstruct
+// paginate A, C with infinite-scroll
+// paginate B with pager
+// service A with serviceClass
+// service C with serviceImpl
+
 // Set an angular suffix
-// angularSuffix * with slipp
+// angularSuffix * with app

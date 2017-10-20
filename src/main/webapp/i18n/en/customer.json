@@ -18,9 +18,7 @@
             },
             "customerLevel": "Customer Level",
             "phone": "Phone",
-            "user": "User",
-            "orders": "Orders",
-            "cartItems": "Cart Items"
+            "user": "User"
         }
     }
 }

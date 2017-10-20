@@ -5,20 +5,8 @@
             "relationshipType": "one-to-one",
             "relationshipName": "user",
             "otherEntityName": "user",
-            "otherEntityField": "id",
+            "otherEntityField": "login",
             "ownerSide": true,
-            "otherEntityRelationshipName": "customer"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "relationshipName": "orders",
-            "otherEntityName": "orders",
-            "otherEntityRelationshipName": "customer"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "relationshipName": "cartItems",
-            "otherEntityName": "cartItems",
             "otherEntityRelationshipName": "customer"
         }
     ],
@@ -33,9 +21,9 @@
             "fieldType": "String"
         }
     ],
-    "changelogDate": "20170816030935",
+    "changelogDate": "20170823142738",
     "entityTableName": "customer",
-    "dto": "mapstruct",
+    "dto": "no",
     "pagination": "pagination",
-    "service": "serviceImpl"
+    "service": "no"
 }

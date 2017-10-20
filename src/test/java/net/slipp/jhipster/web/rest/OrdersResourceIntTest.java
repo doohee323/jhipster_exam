@@ -4,10 +4,7 @@ import net.slipp.jhipster.JhipsterApp;
 
 import net.slipp.jhipster.domain.Orders;
 import net.slipp.jhipster.repository.OrdersRepository;
-import net.slipp.jhipster.service.OrdersService;
 import net.slipp.jhipster.repository.search.OrdersSearchRepository;
-import net.slipp.jhipster.service.dto.OrdersDTO;
-import net.slipp.jhipster.service.mapper.OrdersMapper;
 import net.slipp.jhipster.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -46,17 +43,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = JhipsterApp.class)
 public class OrdersResourceIntTest {
 
-    private static final ZonedDateTime DEFAULT_ORDER_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
-    private static final ZonedDateTime UPDATED_ORDER_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final String DEFAULT_ORDER_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_ORDER_CODE = "BBBBBBBBBB";
+
+    private static final ZonedDateTime DEFAULT_ORDER_DT = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_ORDER_DT = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
 
     @Autowired
     private OrdersRepository ordersRepository;
-
-    @Autowired
-    private OrdersMapper ordersMapper;
-
-    @Autowired
-    private OrdersService ordersService;
 
     @Autowired
     private OrdersSearchRepository ordersSearchRepository;
@@ -80,7 +74,7 @@ public class OrdersResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        OrdersResource ordersResource = new OrdersResource(ordersService);
+        OrdersResource ordersResource = new OrdersResource(ordersRepository, ordersSearchRepository);
         this.restOrdersMockMvc = MockMvcBuilders.standaloneSetup(ordersResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -95,7 +89,8 @@ public class OrdersResourceIntTest {
      */
     public static Orders createEntity(EntityManager em) {
         Orders orders = new Orders()
-            .orderDate(DEFAULT_ORDER_DATE);
+            .orderCode(DEFAULT_ORDER_CODE)
+            .orderDt(DEFAULT_ORDER_DT);
         return orders;
     }
 
@@ -111,17 +106,17 @@ public class OrdersResourceIntTest {
         int databaseSizeBeforeCreate = ordersRepository.findAll().size();
 
         // Create the Orders
-        OrdersDTO ordersDTO = ordersMapper.toDto(orders);
         restOrdersMockMvc.perform(post("/api/orders")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(ordersDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(orders)))
             .andExpect(status().isCreated());
 
         // Validate the Orders in the database
         List<Orders> ordersList = ordersRepository.findAll();
         assertThat(ordersList).hasSize(databaseSizeBeforeCreate + 1);
         Orders testOrders = ordersList.get(ordersList.size() - 1);
-        assertThat(testOrders.getOrderDate()).isEqualTo(DEFAULT_ORDER_DATE);
+        assertThat(testOrders.getOrderCode()).isEqualTo(DEFAULT_ORDER_CODE);
+        assertThat(testOrders.getOrderDt()).isEqualTo(DEFAULT_ORDER_DT);
 
         // Validate the Orders in Elasticsearch
         Orders ordersEs = ordersSearchRepository.findOne(testOrders.getId());
@@ -135,17 +130,52 @@ public class OrdersResourceIntTest {
 
         // Create the Orders with an existing ID
         orders.setId(1L);
-        OrdersDTO ordersDTO = ordersMapper.toDto(orders);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restOrdersMockMvc.perform(post("/api/orders")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(ordersDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(orders)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
         List<Orders> ordersList = ordersRepository.findAll();
         assertThat(ordersList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    public void checkOrderCodeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = ordersRepository.findAll().size();
+        // set the field null
+        orders.setOrderCode(null);
+
+        // Create the Orders, which fails.
+
+        restOrdersMockMvc.perform(post("/api/orders")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(orders)))
+            .andExpect(status().isBadRequest());
+
+        List<Orders> ordersList = ordersRepository.findAll();
+        assertThat(ordersList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkOrderDtIsRequired() throws Exception {
+        int databaseSizeBeforeTest = ordersRepository.findAll().size();
+        // set the field null
+        orders.setOrderDt(null);
+
+        // Create the Orders, which fails.
+
+        restOrdersMockMvc.perform(post("/api/orders")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(orders)))
+            .andExpect(status().isBadRequest());
+
+        List<Orders> ordersList = ordersRepository.findAll();
+        assertThat(ordersList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -159,7 +189,8 @@ public class OrdersResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(orders.getId().intValue())))
-            .andExpect(jsonPath("$.[*].orderDate").value(hasItem(sameInstant(DEFAULT_ORDER_DATE))));
+            .andExpect(jsonPath("$.[*].orderCode").value(hasItem(DEFAULT_ORDER_CODE.toString())))
+            .andExpect(jsonPath("$.[*].orderDt").value(hasItem(sameInstant(DEFAULT_ORDER_DT))));
     }
 
     @Test
@@ -173,7 +204,8 @@ public class OrdersResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(orders.getId().intValue()))
-            .andExpect(jsonPath("$.orderDate").value(sameInstant(DEFAULT_ORDER_DATE)));
+            .andExpect(jsonPath("$.orderCode").value(DEFAULT_ORDER_CODE.toString()))
+            .andExpect(jsonPath("$.orderDt").value(sameInstant(DEFAULT_ORDER_DT)));
     }
 
     @Test
@@ -195,19 +227,20 @@ public class OrdersResourceIntTest {
         // Update the orders
         Orders updatedOrders = ordersRepository.findOne(orders.getId());
         updatedOrders
-            .orderDate(UPDATED_ORDER_DATE);
-        OrdersDTO ordersDTO = ordersMapper.toDto(updatedOrders);
+            .orderCode(UPDATED_ORDER_CODE)
+            .orderDt(UPDATED_ORDER_DT);
 
         restOrdersMockMvc.perform(put("/api/orders")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(ordersDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedOrders)))
             .andExpect(status().isOk());
 
         // Validate the Orders in the database
         List<Orders> ordersList = ordersRepository.findAll();
         assertThat(ordersList).hasSize(databaseSizeBeforeUpdate);
         Orders testOrders = ordersList.get(ordersList.size() - 1);
-        assertThat(testOrders.getOrderDate()).isEqualTo(UPDATED_ORDER_DATE);
+        assertThat(testOrders.getOrderCode()).isEqualTo(UPDATED_ORDER_CODE);
+        assertThat(testOrders.getOrderDt()).isEqualTo(UPDATED_ORDER_DT);
 
         // Validate the Orders in Elasticsearch
         Orders ordersEs = ordersSearchRepository.findOne(testOrders.getId());
@@ -220,12 +253,11 @@ public class OrdersResourceIntTest {
         int databaseSizeBeforeUpdate = ordersRepository.findAll().size();
 
         // Create the Orders
-        OrdersDTO ordersDTO = ordersMapper.toDto(orders);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restOrdersMockMvc.perform(put("/api/orders")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(ordersDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(orders)))
             .andExpect(status().isCreated());
 
         // Validate the Orders in the database
@@ -267,7 +299,8 @@ public class OrdersResourceIntTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(orders.getId().intValue())))
-            .andExpect(jsonPath("$.[*].orderDate").value(hasItem(sameInstant(DEFAULT_ORDER_DATE))));
+            .andExpect(jsonPath("$.[*].orderCode").value(hasItem(DEFAULT_ORDER_CODE.toString())))
+            .andExpect(jsonPath("$.[*].orderDt").value(hasItem(sameInstant(DEFAULT_ORDER_DT))));
     }
 
     @Test
@@ -283,28 +316,5 @@ public class OrdersResourceIntTest {
         assertThat(orders1).isNotEqualTo(orders2);
         orders1.setId(null);
         assertThat(orders1).isNotEqualTo(orders2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(OrdersDTO.class);
-        OrdersDTO ordersDTO1 = new OrdersDTO();
-        ordersDTO1.setId(1L);
-        OrdersDTO ordersDTO2 = new OrdersDTO();
-        assertThat(ordersDTO1).isNotEqualTo(ordersDTO2);
-        ordersDTO2.setId(ordersDTO1.getId());
-        assertThat(ordersDTO1).isEqualTo(ordersDTO2);
-        ordersDTO2.setId(2L);
-        assertThat(ordersDTO1).isNotEqualTo(ordersDTO2);
-        ordersDTO1.setId(null);
-        assertThat(ordersDTO1).isNotEqualTo(ordersDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(ordersMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(ordersMapper.fromId(null)).isNull();
     }
 }

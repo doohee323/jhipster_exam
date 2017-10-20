@@ -2,33 +2,37 @@
     "fluentMethods": true,
     "relationships": [
         {
+            "relationshipType": "many-to-one",
             "relationshipName": "orders",
             "otherEntityName": "orders",
-            "relationshipType": "many-to-one",
-            "otherEntityField": "id"
+            "otherEntityField": "orderCode"
         },
         {
-            "relationshipType": "one-to-one",
+            "relationshipType": "many-to-one",
             "relationshipName": "product",
             "otherEntityName": "product",
-            "otherEntityField": "id",
-            "ownerSide": true,
-            "otherEntityRelationshipName": "orderItems"
+            "otherEntityField": "productName"
         }
     ],
     "fields": [
         {
             "fieldName": "unitPrice",
-            "fieldType": "Integer"
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldName": "quantity",
-            "fieldType": "Integer"
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
-    "changelogDate": "20170816030937",
+    "changelogDate": "20170823142740",
     "entityTableName": "order_items",
-    "dto": "mapstruct",
+    "dto": "no",
     "pagination": "infinite-scroll",
-    "service": "serviceImpl"
+    "service": "no"
 }

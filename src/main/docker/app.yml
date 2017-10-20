@@ -17,3 +17,7 @@ services:
         extends:
             file: elasticsearch.yml
             service: jhipster-elasticsearch
+    jhipster-jenkins:
+        extends:
+            file: jenkins.yml
+            service: jhipster-jenkins

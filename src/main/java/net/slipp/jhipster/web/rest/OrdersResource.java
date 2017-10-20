@@ -1,10 +1,12 @@
 package net.slipp.jhipster.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import net.slipp.jhipster.service.OrdersService;
+import net.slipp.jhipster.domain.Orders;
+
+import net.slipp.jhipster.repository.OrdersRepository;
+import net.slipp.jhipster.repository.search.OrdersSearchRepository;
 import net.slipp.jhipster.web.rest.util.HeaderUtil;
 import net.slipp.jhipster.web.rest.util.PaginationUtil;
-import net.slipp.jhipster.service.dto.OrdersDTO;
 import io.swagger.annotations.ApiParam;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -16,11 +18,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static org.elasticsearch.index.query.QueryBuilders.*;
@@ -36,27 +40,31 @@ public class OrdersResource {
 
     private static final String ENTITY_NAME = "orders";
 
-    private final OrdersService ordersService;
+    private final OrdersRepository ordersRepository;
 
-    public OrdersResource(OrdersService ordersService) {
-        this.ordersService = ordersService;
+    private final OrdersSearchRepository ordersSearchRepository;
+
+    public OrdersResource(OrdersRepository ordersRepository, OrdersSearchRepository ordersSearchRepository) {
+        this.ordersRepository = ordersRepository;
+        this.ordersSearchRepository = ordersSearchRepository;
     }
 
     /**
      * POST  /orders : Create a new orders.
      *
-     * @param ordersDTO the ordersDTO to create
-     * @return the ResponseEntity with status 201 (Created) and with body the new ordersDTO, or with status 400 (Bad Request) if the orders has already an ID
+     * @param orders the orders to create
+     * @return the ResponseEntity with status 201 (Created) and with body the new orders, or with status 400 (Bad Request) if the orders has already an ID
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PostMapping("/orders")
     @Timed
-    public ResponseEntity<OrdersDTO> createOrders(@RequestBody OrdersDTO ordersDTO) throws URISyntaxException {
-        log.debug("REST request to save Orders : {}", ordersDTO);
-        if (ordersDTO.getId() != null) {
+    public ResponseEntity<Orders> createOrders(@Valid @RequestBody Orders orders) throws URISyntaxException {
+        log.debug("REST request to save Orders : {}", orders);
+        if (orders.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert(ENTITY_NAME, "idexists", "A new orders cannot already have an ID")).body(null);
         }
-        OrdersDTO result = ordersService.save(ordersDTO);
+        Orders result = ordersRepository.save(orders);
+        ordersSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/orders/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -65,22 +73,23 @@ public class OrdersResource {
     /**
      * PUT  /orders : Updates an existing orders.
      *
-     * @param ordersDTO the ordersDTO to update
-     * @return the ResponseEntity with status 200 (OK) and with body the updated ordersDTO,
-     * or with status 400 (Bad Request) if the ordersDTO is not valid,
-     * or with status 500 (Internal Server Error) if the ordersDTO couldn't be updated
+     * @param orders the orders to update
+     * @return the ResponseEntity with status 200 (OK) and with body the updated orders,
+     * or with status 400 (Bad Request) if the orders is not valid,
+     * or with status 500 (Internal Server Error) if the orders couldn't be updated
      * @throws URISyntaxException if the Location URI syntax is incorrect
      */
     @PutMapping("/orders")
     @Timed
-    public ResponseEntity<OrdersDTO> updateOrders(@RequestBody OrdersDTO ordersDTO) throws URISyntaxException {
-        log.debug("REST request to update Orders : {}", ordersDTO);
-        if (ordersDTO.getId() == null) {
-            return createOrders(ordersDTO);
+    public ResponseEntity<Orders> updateOrders(@Valid @RequestBody Orders orders) throws URISyntaxException {
+        log.debug("REST request to update Orders : {}", orders);
+        if (orders.getId() == null) {
+            return createOrders(orders);
         }
-        OrdersDTO result = ordersService.save(ordersDTO);
+        Orders result = ordersRepository.save(orders);
+        ordersSearchRepository.save(result);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, ordersDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(ENTITY_NAME, orders.getId().toString()))
             .body(result);
     }
 
@@ -92,9 +101,9 @@ public class OrdersResource {
      */
     @GetMapping("/orders")
     @Timed
-    public ResponseEntity<List<OrdersDTO>> getAllOrders(@ApiParam Pageable pageable) {
+    public ResponseEntity<List<Orders>> getAllOrders(@ApiParam Pageable pageable) {
         log.debug("REST request to get a page of Orders");
-        Page<OrdersDTO> page = ordersService.findAll(pageable);
+        Page<Orders> page = ordersRepository.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/orders");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -102,28 +111,29 @@ public class OrdersResource {
     /**
      * GET  /orders/:id : get the "id" orders.
      *
-     * @param id the id of the ordersDTO to retrieve
-     * @return the ResponseEntity with status 200 (OK) and with body the ordersDTO, or with status 404 (Not Found)
+     * @param id the id of the orders to retrieve
+     * @return the ResponseEntity with status 200 (OK) and with body the orders, or with status 404 (Not Found)
      */
     @GetMapping("/orders/{id}")
     @Timed
-    public ResponseEntity<OrdersDTO> getOrders(@PathVariable Long id) {
+    public ResponseEntity<Orders> getOrders(@PathVariable Long id) {
         log.debug("REST request to get Orders : {}", id);
-        OrdersDTO ordersDTO = ordersService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(ordersDTO));
+        Orders orders = ordersRepository.findOne(id);
+        return ResponseUtil.wrapOrNotFound(Optional.ofNullable(orders));
     }
 
     /**
      * DELETE  /orders/:id : delete the "id" orders.
      *
-     * @param id the id of the ordersDTO to delete
+     * @param id the id of the orders to delete
      * @return the ResponseEntity with status 200 (OK)
      */
     @DeleteMapping("/orders/{id}")
     @Timed
     public ResponseEntity<Void> deleteOrders(@PathVariable Long id) {
         log.debug("REST request to delete Orders : {}", id);
-        ordersService.delete(id);
+        ordersRepository.delete(id);
+        ordersSearchRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
     }
 
@@ -137,9 +147,9 @@ public class OrdersResource {
      */
     @GetMapping("/_search/orders")
     @Timed
-    public ResponseEntity<List<OrdersDTO>> searchOrders(@RequestParam String query, @ApiParam Pageable pageable) {
+    public ResponseEntity<List<Orders>> searchOrders(@RequestParam String query, @ApiParam Pageable pageable) {
         log.debug("REST request to search for a page of Orders for query {}", query);
-        Page<OrdersDTO> page = ordersService.search(query, pageable);
+        Page<Orders> page = ordersSearchRepository.search(queryStringQuery(query), pageable);
         HttpHeaders headers = PaginationUtil.generateSearchPaginationHttpHeaders(query, page, "/api/_search/orders");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

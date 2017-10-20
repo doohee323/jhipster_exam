@@ -1,10 +1,11 @@
-import { BaseEntity } from './../../shared';
+import { BaseEntity, User } from './../../shared';
 
 export class CartItems implements BaseEntity {
     constructor(
         public id?: number,
-        public customerId?: number,
-        public productId?: number,
+        public createDt?: any,
+        public product?: BaseEntity,
+        public user?: User,
     ) {
     }
 }

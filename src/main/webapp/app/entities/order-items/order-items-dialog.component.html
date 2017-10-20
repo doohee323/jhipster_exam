@@ -15,26 +15,46 @@
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="jhipsterApp.orderItems.unitPrice" for="field_unitPrice">Unit Price</label>
             <input type="number" class="form-control" name="unitPrice" id="field_unitPrice"
-                [(ngModel)]="orderItems.unitPrice"  />
+                [(ngModel)]="orderItems.unitPrice" required />
+            <div [hidden]="!(editForm.controls.unitPrice?.dirty && editForm.controls.unitPrice?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.unitPrice?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.unitPrice?.errors?.number" jhiTranslate="entity.validation.number">
+                    This field should be a number.
+                </small>
+            </div>
         </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="jhipsterApp.orderItems.quantity" for="field_quantity">Quantity</label>
             <input type="number" class="form-control" name="quantity" id="field_quantity"
-                [(ngModel)]="orderItems.quantity"  />
+                [(ngModel)]="orderItems.quantity" required />
+            <div [hidden]="!(editForm.controls.quantity?.dirty && editForm.controls.quantity?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.quantity?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.quantity?.errors?.number" jhiTranslate="entity.validation.number">
+                    This field should be a number.
+                </small>
+            </div>
         </div>
 
         <div class="form-group">
             <label jhiTranslate="jhipsterApp.orderItems.orders" for="field_orders">Orders</label>
-            <select class="form-control" id="field_orders" name="orders" [(ngModel)]="orderItems.ordersId" >
+            <select class="form-control" id="field_orders" name="orders" [(ngModel)]="orderItems.orders" >
                 <option [ngValue]="null"></option>
-                <option [ngValue]="ordersOption.id" *ngFor="let ordersOption of orders; trackBy: trackOrdersById">{{ordersOption.id}}</option>
+                <option [ngValue]="ordersOption.id === orderItems.orders?.id ? orderItems.orders : ordersOption" *ngFor="let ordersOption of orders; trackBy: trackOrdersById">{{ordersOption.orderCode}}</option>
             </select>
         </div>
         <div class="form-group">
             <label jhiTranslate="jhipsterApp.orderItems.product" for="field_product">Product</label>
-            <select class="form-control" id="field_product" name="product" [(ngModel)]="orderItems.productId">
+            <select class="form-control" id="field_product" name="product" [(ngModel)]="orderItems.product" >
                 <option [ngValue]="null"></option>
-                <option [ngValue]="productOption.id" *ngFor="let productOption of products; trackBy: trackProductById">{{productOption.id}}</option>
+                <option [ngValue]="productOption.id === orderItems.product?.id ? orderItems.product : productOption" *ngFor="let productOption of products; trackBy: trackProductById">{{productOption.productName}}</option>
             </select>
         </div>
     </div>

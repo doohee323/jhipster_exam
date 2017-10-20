@@ -5,6 +5,7 @@ import { JhipsterOrdersModule } from './orders/orders.module';
 import { JhipsterOrderItemsModule } from './order-items/order-items.module';
 import { JhipsterProductModule } from './product/product.module';
 import { JhipsterCartItemsModule } from './cart-items/cart-items.module';
+import { JhipsterTagModule } from './tag/tag.module';
 /* jhipster-needle-add-entity-module-import - JHipster will add entity modules imports here */
 
 @NgModule({
@@ -14,6 +15,7 @@ import { JhipsterCartItemsModule } from './cart-items/cart-items.module';
         JhipsterOrderItemsModule,
         JhipsterProductModule,
         JhipsterCartItemsModule,
+        JhipsterTagModule,
         /* jhipster-needle-add-entity-module - JHipster will add entity modules here */
     ],
     declarations: [],

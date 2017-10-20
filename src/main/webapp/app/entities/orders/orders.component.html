@@ -30,19 +30,19 @@
             <thead>
             <tr jhiSort [(predicate)]="predicate" [(ascending)]="reverse" [callback]="reset.bind(this)">
             <th jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="orderDate"><span jhiTranslate="jhipsterApp.orders.orderDate">Order Date</span> <span class="fa fa-sort"></span></th>
-            <th jhiSortBy="customerId"><span jhiTranslate="jhipsterApp.orders.customer">Customer</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="orderCode"><span jhiTranslate="jhipsterApp.orders.orderCode">Order Code</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="orderDt"><span jhiTranslate="jhipsterApp.orders.orderDt">Order Dt</span> <span class="fa fa-sort"></span></th>
+            <th jhiSortBy="user.login"><span jhiTranslate="jhipsterApp.orders.user">User</span> <span class="fa fa-sort"></span></th>
             <th></th>
             </tr>
             </thead>
             <tbody infinite-scroll (scrolled)="loadPage(page + 1)" [infiniteScrollDisabled]="page >= links['last']" [infiniteScrollDistance]="0">
             <tr *ngFor="let orders of orders ;trackBy: trackId">
                 <td><a [routerLink]="['../orders', orders.id ]">{{orders.id}}</a></td>
-                <td>{{orders.orderDate | date:'medium'}}</td>
+                <td>{{orders.orderCode}}</td>
+                <td>{{orders.orderDt | date:'medium'}}</td>
                 <td>
-                    <div *ngIf="orders.customerId">
-                        <a [routerLink]="['../customer', orders.customerId  ]" >{{orders.customerId}}</a>
-                    </div>
+                    {{orders.user?.login}}
                 </td>
                 <td class="text-right">
                     <div class="btn-group flex-btn-group-container">

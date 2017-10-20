@@ -9,7 +9,7 @@ import { JhiEventManager, JhiAlertService } from 'ng-jhipster';
 import { Orders } from './orders.model';
 import { OrdersPopupService } from './orders-popup.service';
 import { OrdersService } from './orders.service';
-import { Customer, CustomerService } from '../customer';
+import { User, UserService } from '../../shared';
 import { ResponseWrapper } from '../../shared';
 
 @Component({
@@ -21,21 +21,21 @@ export class OrdersDialogComponent implements OnInit {
     orders: Orders;
     isSaving: boolean;
 
-    customers: Customer[];
+    users: User[];
 
     constructor(
         public activeModal: NgbActiveModal,
         private alertService: JhiAlertService,
         private ordersService: OrdersService,
-        private customerService: CustomerService,
+        private userService: UserService,
         private eventManager: JhiEventManager
     ) {
     }
 
     ngOnInit() {
         this.isSaving = false;
-        this.customerService.query()
-            .subscribe((res: ResponseWrapper) => { this.customers = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
+        this.userService.query()
+            .subscribe((res: ResponseWrapper) => { this.users = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
 
     clear() {
@@ -78,7 +78,7 @@ export class OrdersDialogComponent implements OnInit {
         this.alertService.error(error.message, null, null);
     }
 
-    trackCustomerById(index: number, item: Customer) {
+    trackUserById(index: number, item: User) {
         return item.id;
     }
 }

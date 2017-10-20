@@ -6,16 +6,18 @@
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20170731200616_add_authorities_row.xml"/>
-    <include file="config/liquibase/changelog/20170816030935_added_entity_Customer.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170816030936_added_entity_Orders.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170816030937_added_entity_OrderItems.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170816030938_added_entity_Product.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170816030939_added_entity_CartItems.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20170823142738_added_entity_Customer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20170823142739_added_entity_Orders.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20170823142740_added_entity_OrderItems.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20170823142741_added_entity_Product.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20170823142742_added_entity_CartItems.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20170823142744_added_entity_Tag.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
-    <include file="config/liquibase/changelog/20170816030935_added_entity_constraints_Customer.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170816030936_added_entity_constraints_Orders.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170816030937_added_entity_constraints_OrderItems.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20170816030939_added_entity_constraints_CartItems.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20170823142738_added_entity_constraints_Customer.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20170823142739_added_entity_constraints_Orders.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20170823142740_added_entity_constraints_OrderItems.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20170823142741_added_entity_constraints_Product.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20170823142742_added_entity_constraints_CartItems.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <include file="config/liquibase/changelog/20170816030940_add_product_row.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>

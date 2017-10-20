@@ -15,7 +15,13 @@
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="jhipsterApp.product.productName" for="field_productName">Product Name</label>
             <input type="text" class="form-control" name="productName" id="field_productName"
-                [(ngModel)]="product.productName"  />
+                [(ngModel)]="product.productName" required />
+            <div [hidden]="!(editForm.controls.productName?.dirty && editForm.controls.productName?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.productName?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+            </div>
         </div>
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="jhipsterApp.product.productDesc" for="field_productDesc">Product Desc</label>
@@ -25,9 +31,25 @@
         <div class="form-group">
             <label class="form-control-label" jhiTranslate="jhipsterApp.product.price" for="field_price">Price</label>
             <input type="number" class="form-control" name="price" id="field_price"
-                [(ngModel)]="product.price"  />
+                [(ngModel)]="product.price" required />
+            <div [hidden]="!(editForm.controls.price?.dirty && editForm.controls.price?.invalid)">
+                <small class="form-text text-danger"
+                   [hidden]="!editForm.controls.price?.errors?.required" jhiTranslate="entity.validation.required">
+                   This field is required.
+                </small>
+                <small class="form-text text-danger"
+                    [hidden]="!editForm.controls.price?.errors?.number" jhiTranslate="entity.validation.number">
+                    This field should be a number.
+                </small>
+            </div>
         </div>
 
+        <div class="form-group">
+            <label jhiTranslate="jhipsterApp.product.tag" for="field_tag">Tag</label>
+            <select class="form-control" id="field_tag" multiple name="tag" [(ngModel)]="product.tags">
+                <option [ngValue]="getSelected(product.tags, tagOption)" *ngFor="let tagOption of tags; trackBy: trackTagById">{{tagOption.name}}</option>
+            </select>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" (click)="clear()">

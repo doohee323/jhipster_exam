@@ -5,8 +5,8 @@ export class OrderItems implements BaseEntity {
         public id?: number,
         public unitPrice?: number,
         public quantity?: number,
-        public ordersId?: number,
-        public productId?: number,
+        public orders?: BaseEntity,
+        public product?: BaseEntity,
     ) {
     }
 }

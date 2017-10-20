@@ -4,10 +4,7 @@ import net.slipp.jhipster.JhipsterApp;
 
 import net.slipp.jhipster.domain.OrderItems;
 import net.slipp.jhipster.repository.OrderItemsRepository;
-import net.slipp.jhipster.service.OrderItemsService;
 import net.slipp.jhipster.repository.search.OrderItemsSearchRepository;
-import net.slipp.jhipster.service.dto.OrderItemsDTO;
-import net.slipp.jhipster.service.mapper.OrderItemsMapper;
 import net.slipp.jhipster.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
@@ -51,12 +48,6 @@ public class OrderItemsResourceIntTest {
     private OrderItemsRepository orderItemsRepository;
 
     @Autowired
-    private OrderItemsMapper orderItemsMapper;
-
-    @Autowired
-    private OrderItemsService orderItemsService;
-
-    @Autowired
     private OrderItemsSearchRepository orderItemsSearchRepository;
 
     @Autowired
@@ -78,7 +69,7 @@ public class OrderItemsResourceIntTest {
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
-        OrderItemsResource orderItemsResource = new OrderItemsResource(orderItemsService);
+        OrderItemsResource orderItemsResource = new OrderItemsResource(orderItemsRepository, orderItemsSearchRepository);
         this.restOrderItemsMockMvc = MockMvcBuilders.standaloneSetup(orderItemsResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setControllerAdvice(exceptionTranslator)
@@ -110,10 +101,9 @@ public class OrderItemsResourceIntTest {
         int databaseSizeBeforeCreate = orderItemsRepository.findAll().size();
 
         // Create the OrderItems
-        OrderItemsDTO orderItemsDTO = orderItemsMapper.toDto(orderItems);
         restOrderItemsMockMvc.perform(post("/api/order-items")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(orderItemsDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(orderItems)))
             .andExpect(status().isCreated());
 
         // Validate the OrderItems in the database
@@ -135,17 +125,52 @@ public class OrderItemsResourceIntTest {
 
         // Create the OrderItems with an existing ID
         orderItems.setId(1L);
-        OrderItemsDTO orderItemsDTO = orderItemsMapper.toDto(orderItems);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restOrderItemsMockMvc.perform(post("/api/order-items")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(orderItemsDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(orderItems)))
             .andExpect(status().isBadRequest());
 
         // Validate the Alice in the database
         List<OrderItems> orderItemsList = orderItemsRepository.findAll();
         assertThat(orderItemsList).hasSize(databaseSizeBeforeCreate);
+    }
+
+    @Test
+    @Transactional
+    public void checkUnitPriceIsRequired() throws Exception {
+        int databaseSizeBeforeTest = orderItemsRepository.findAll().size();
+        // set the field null
+        orderItems.setUnitPrice(null);
+
+        // Create the OrderItems, which fails.
+
+        restOrderItemsMockMvc.perform(post("/api/order-items")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(orderItems)))
+            .andExpect(status().isBadRequest());
+
+        List<OrderItems> orderItemsList = orderItemsRepository.findAll();
+        assertThat(orderItemsList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkQuantityIsRequired() throws Exception {
+        int databaseSizeBeforeTest = orderItemsRepository.findAll().size();
+        // set the field null
+        orderItems.setQuantity(null);
+
+        // Create the OrderItems, which fails.
+
+        restOrderItemsMockMvc.perform(post("/api/order-items")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(orderItems)))
+            .andExpect(status().isBadRequest());
+
+        List<OrderItems> orderItemsList = orderItemsRepository.findAll();
+        assertThat(orderItemsList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -199,11 +224,10 @@ public class OrderItemsResourceIntTest {
         updatedOrderItems
             .unitPrice(UPDATED_UNIT_PRICE)
             .quantity(UPDATED_QUANTITY);
-        OrderItemsDTO orderItemsDTO = orderItemsMapper.toDto(updatedOrderItems);
 
         restOrderItemsMockMvc.perform(put("/api/order-items")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(orderItemsDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(updatedOrderItems)))
             .andExpect(status().isOk());
 
         // Validate the OrderItems in the database
@@ -224,12 +248,11 @@ public class OrderItemsResourceIntTest {
         int databaseSizeBeforeUpdate = orderItemsRepository.findAll().size();
 
         // Create the OrderItems
-        OrderItemsDTO orderItemsDTO = orderItemsMapper.toDto(orderItems);
 
         // If the entity doesn't have an ID, it will be created instead of just being updated
         restOrderItemsMockMvc.perform(put("/api/order-items")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
-            .content(TestUtil.convertObjectToJsonBytes(orderItemsDTO)))
+            .content(TestUtil.convertObjectToJsonBytes(orderItems)))
             .andExpect(status().isCreated());
 
         // Validate the OrderItems in the database
@@ -288,28 +311,5 @@ public class OrderItemsResourceIntTest {
         assertThat(orderItems1).isNotEqualTo(orderItems2);
         orderItems1.setId(null);
         assertThat(orderItems1).isNotEqualTo(orderItems2);
-    }
-
-    @Test
-    @Transactional
-    public void dtoEqualsVerifier() throws Exception {
-        TestUtil.equalsVerifier(OrderItemsDTO.class);
-        OrderItemsDTO orderItemsDTO1 = new OrderItemsDTO();
-        orderItemsDTO1.setId(1L);
-        OrderItemsDTO orderItemsDTO2 = new OrderItemsDTO();
-        assertThat(orderItemsDTO1).isNotEqualTo(orderItemsDTO2);
-        orderItemsDTO2.setId(orderItemsDTO1.getId());
-        assertThat(orderItemsDTO1).isEqualTo(orderItemsDTO2);
-        orderItemsDTO2.setId(2L);
-        assertThat(orderItemsDTO1).isNotEqualTo(orderItemsDTO2);
-        orderItemsDTO1.setId(null);
-        assertThat(orderItemsDTO1).isNotEqualTo(orderItemsDTO2);
-    }
-
-    @Test
-    @Transactional
-    public void testEntityFromId() {
-        assertThat(orderItemsMapper.fromId(42L).getId()).isEqualTo(42);
-        assertThat(orderItemsMapper.fromId(null)).isNull();
     }
 }

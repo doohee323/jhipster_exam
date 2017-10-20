@@ -16,9 +16,9 @@
             "detail": {
                 "title": "Orders"
             },
-            "orderDate": "Order Date",
-            "customer": "Customer",
-            "orderItems": "Order Items"
+            "orderCode": "Order Code",
+            "orderDt": "Order Dt",
+            "user": "User"
         }
     }
 }

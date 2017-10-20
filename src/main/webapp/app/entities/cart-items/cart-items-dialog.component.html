@@ -12,19 +12,26 @@
             <input type="text" class="form-control" id="id" name="id"
                    [(ngModel)]="cartItems.id" readonly />
         </div>
+        <div class="form-group">
+            <label class="form-control-label" jhiTranslate="jhipsterApp.cartItems.createDt" for="field_createDt">Create Dt</label>
+            <div class="d-flex">
+                <input id="field_createDt" type="datetime-local" class="form-control" name="createDt" [(ngModel)]="cartItems.createDt"
+                  />
+            </div>
+        </div>
 
         <div class="form-group">
-            <label jhiTranslate="jhipsterApp.cartItems.customer" for="field_customer">Customer</label>
-            <select class="form-control" id="field_customer" name="customer" [(ngModel)]="cartItems.customerId" >
+            <label jhiTranslate="jhipsterApp.cartItems.product" for="field_product">Product</label>
+            <select class="form-control" id="field_product" name="product" [(ngModel)]="cartItems.product" >
                 <option [ngValue]="null"></option>
-                <option [ngValue]="customerOption.id" *ngFor="let customerOption of customers; trackBy: trackCustomerById">{{customerOption.id}}</option>
+                <option [ngValue]="productOption.id === cartItems.product?.id ? cartItems.product : productOption" *ngFor="let productOption of products; trackBy: trackProductById">{{productOption.productName}}</option>
             </select>
         </div>
         <div class="form-group">
-            <label jhiTranslate="jhipsterApp.cartItems.product" for="field_product">Product</label>
-            <select class="form-control" id="field_product" name="product" [(ngModel)]="cartItems.productId">
+            <label jhiTranslate="jhipsterApp.cartItems.user" for="field_user">User</label>
+            <select class="form-control" id="field_user" name="user" [(ngModel)]="cartItems.user" >
                 <option [ngValue]="null"></option>
-                <option [ngValue]="productOption.id" *ngFor="let productOption of products; trackBy: trackProductById">{{productOption.id}}</option>
+                <option [ngValue]="userOption.id === cartItems.user?.id ? cartItems.user : userOption" *ngFor="let userOption of users; trackBy: trackUserById">{{userOption.login}}</option>
             </select>
         </div>
     </div>

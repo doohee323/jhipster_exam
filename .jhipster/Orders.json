@@ -2,27 +2,31 @@
     "fluentMethods": true,
     "relationships": [
         {
-            "relationshipName": "customer",
-            "otherEntityName": "customer",
             "relationshipType": "many-to-one",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "relationshipName": "orderItems",
-            "otherEntityName": "orderItems",
-            "otherEntityRelationshipName": "orders"
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "otherEntityField": "login"
         }
     ],
     "fields": [
         {
-            "fieldName": "orderDate",
-            "fieldType": "ZonedDateTime"
+            "fieldName": "orderCode",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "orderDt",
+            "fieldType": "ZonedDateTime",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
-    "changelogDate": "20170816030936",
+    "changelogDate": "20170823142739",
     "entityTableName": "orders",
-    "dto": "mapstruct",
+    "dto": "no",
     "pagination": "infinite-scroll",
-    "service": "serviceImpl"
+    "service": "no"
 }

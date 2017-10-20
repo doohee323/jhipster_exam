@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { Observable } from 'rxjs/Rx';
+import { JhiDateUtils } from 'ng-jhipster';
 
 import { CartItems } from './cart-items.model';
 import { ResponseWrapper, createRequestOption } from '../../shared';
@@ -8,28 +9,34 @@ import { ResponseWrapper, createRequestOption } from '../../shared';
 @Injectable()
 export class CartItemsService {
 
-    private resourceUrl = 'api/cart-items';
-    private resourceSearchUrl = 'api/_search/cart-items';
+    protected resourceUrl = 'api/cart-items';
+    protected resourceSearchUrl = 'api/_search/cart-items';
 
-    constructor(private http: Http) { }
+    constructor(protected http: Http, protected dateUtils: JhiDateUtils) { }
 
     create(cartItems: CartItems): Observable<CartItems> {
         const copy = this.convert(cartItems);
         return this.http.post(this.resourceUrl, copy).map((res: Response) => {
-            return res.json();
+            const jsonResponse = res.json();
+            this.convertItemFromServer(jsonResponse);
+            return jsonResponse;
         });
     }
 
     update(cartItems: CartItems): Observable<CartItems> {
         const copy = this.convert(cartItems);
         return this.http.put(this.resourceUrl, copy).map((res: Response) => {
-            return res.json();
+            const jsonResponse = res.json();
+            this.convertItemFromServer(jsonResponse);
+            return jsonResponse;
         });
     }
 
     find(id: number): Observable<CartItems> {
         return this.http.get(`${this.resourceUrl}/${id}`).map((res: Response) => {
-            return res.json();
+            const jsonResponse = res.json();
+            this.convertItemFromServer(jsonResponse);
+            return jsonResponse;
         });
     }
 
@@ -49,13 +56,23 @@ export class CartItemsService {
             .map((res: any) => this.convertResponse(res));
     }
 
-    private convertResponse(res: Response): ResponseWrapper {
+    protected convertResponse(res: Response): ResponseWrapper {
         const jsonResponse = res.json();
+        for (let i = 0; i < jsonResponse.length; i++) {
+            this.convertItemFromServer(jsonResponse[i]);
+        }
         return new ResponseWrapper(res.headers, jsonResponse, res.status);
     }
 
-    private convert(cartItems: CartItems): CartItems {
+    protected convertItemFromServer(entity: any) {
+        entity.createDt = this.dateUtils
+            .convertDateTimeFromServer(entity.createDt);
+    }
+
+    protected convert(cartItems: CartItems): CartItems {
         const copy: CartItems = Object.assign({}, cartItems);
+
+        copy.createDt = this.dateUtils.toDate(cartItems.createDt);
         return copy;
     }
 }

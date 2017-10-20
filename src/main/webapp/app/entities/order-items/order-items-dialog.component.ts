@@ -40,19 +40,8 @@ export class OrderItemsDialogComponent implements OnInit {
         this.isSaving = false;
         this.ordersService.query()
             .subscribe((res: ResponseWrapper) => { this.orders = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
-        this.productService
-            .query({filter: 'orderitems-is-null'})
-            .subscribe((res: ResponseWrapper) => {
-                if (!this.orderItems.productId) {
-                    this.products = res.json;
-                } else {
-                    this.productService
-                        .find(this.orderItems.productId)
-                        .subscribe((subRes: Product) => {
-                            this.products = [subRes].concat(res.json);
-                        }, (subRes: ResponseWrapper) => this.onError(subRes.json));
-                }
-            }, (res: ResponseWrapper) => this.onError(res.json));
+        this.productService.query()
+            .subscribe((res: ResponseWrapper) => { this.products = res.json; }, (res: ResponseWrapper) => this.onError(res.json));
     }
 
     clear() {
